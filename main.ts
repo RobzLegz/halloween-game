@@ -8,41 +8,14 @@ let mouseX = 0;
 let mouseY = 0;
 let moveAnim: number | null = null;
 
+let monsters = [];
+
 document.addEventListener("mousemove", (e) => {
     const {clientX, clientY} = e;
 
     mouseX = clientX;
     mouseY = clientY;
 })
-
-const setup = () => {
-    if(!ctx){
-        return;
-    }
-    
-    
-    canvas.width = width;
-    canvas.height = height;
-    
-    ctx.fillStyle = "#000000";
-    ctx.fillRect(0, 0, width, height);    
-
-    const player = new Player(width / 2, height / 2);
-
-    player.draw();
-
-    document.addEventListener("keypress", function(event) {
-        if (event.key == "w") {
-            player.move("forward");
-        }else if (event.key == "d") {
-            player.move("right");
-        }else if (event.key == "s") {
-            player.move("backward");
-        }else if (event.key == "a") {
-            player.move("left");
-        }
-    });
-}
 
 class Player {
     speed: number = 10;
@@ -81,6 +54,75 @@ class Player {
         }
         this.draw();
     }   
+
+    isNextToMonster(){
+
+    }
+}
+
+const player = new Player(width / 2, height / 2);
+
+
+const setup = () => {
+    if(!ctx){
+        return;
+    }
+
+    canvas.width = width;
+    canvas.height = height;
+    
+    ctx.fillStyle = "#000000";
+    ctx.fillRect(0, 0, width, height);    
+   
+    drawMonsters();
+
+    player.draw();
+
+    document.addEventListener("keypress", function(event) {
+        if (event.key == "w") {
+            player.move("forward");
+        }else if (event.key == "d") {
+            player.move("right");
+        }else if (event.key == "s") {
+            player.move("backward");
+        }else if (event.key == "a") {
+            player.move("left");
+        }
+    });
+}
+
+const genRandBetween = (min: number, max: number) => {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+const monsterTypes = ["ghost", "zombie", "slime"];
+
+class Monster{
+    constructor (public x: number, public y: number, public type: string){
+        this.x = x;
+        this.y = y
+        this.type = type;
+    }
+
+    isNextToPlayer(){
+        
+    }
+}
+
+const drawMonsters = () => {
+    while(monsters.length < 20){
+        const x = genRandBetween(0, width);
+        const y = genRandBetween(0, height);
+        const type = monsterTypes[genRandBetween(0, monsterTypes.length - 1)]
+
+        const monster = new Monster(x, y, type);
+
+        monsters = [...monsters, monster];
+    }
+}
+
+for(let i = monsters.length - 1; i > 0; i--){
+    
 }
 
 setup();
